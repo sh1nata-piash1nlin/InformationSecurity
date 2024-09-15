@@ -146,7 +146,7 @@ echo $(python -c "print('a'*128 + '\x5b\x84\x04\x08')") | ./bof3.out
 # CTF.c
 ## I. Interpret the attack: 
 
-![image](https://github.com/user-attachments/assets/bf5ed160-8784-4ab4-9ad6-5363efa661ef)
+![image](https://github.com/user-attachments/assets/b991c129-95b3-4019-bb24-e836b75fad28)
 
 The goal of the attack is to force the program to execute `myfunc()` with the correct values for `p` `(0x04081211)` and `q` `(0x44644262)`.
 

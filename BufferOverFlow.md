@@ -2,7 +2,6 @@
 @author: Nguyen Duc Tri 
 @id: 22110082
 """
-
 # BUFFER OVERFLOW ATTACK 
 # BOF1.c
 ## I. Prepare for the lab environment
@@ -93,7 +92,13 @@ Instead of returning to its original position to continue the normal program flo
 
 ![image](https://github.com/user-attachments/assets/c75f57d2-fa2b-432a-b67b-7c771c1f6d6b)
 
-   
+# BOF2.c 
+## I. Interpret the attack:
+
+![image](https://github.com/user-attachments/assets/f6dbdf24-0a77-473c-ba52-81caa5b3aded)
+
+
+
 
 
 

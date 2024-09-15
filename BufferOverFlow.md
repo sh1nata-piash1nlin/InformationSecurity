@@ -143,4 +143,59 @@ echo $(python -c "print('a'*128 + '\x5b\x84\x04\x08')") | ./bof3.out
 ```
 ![image](https://github.com/user-attachments/assets/1521539c-ebe3-4fb7-9973-03c0738778c8)
 
+# CTF.c
+## I. Interpret the attack: 
+
+![image](https://github.com/user-attachments/assets/bf5ed160-8784-4ab4-9ad6-5363efa661ef)
+
+The goal of the attack is to force the program to execute `myfunc()` with the correct values for `p` `(0x04081211)` and `q` `(0x44644262)`.
+
+By exploiting buffer overflows to overwrite return addresses, we can access into the `myfunc()`. 
+
+## II. Conducting the attack: 
+
+1. At first, we need to know the address of `myfunc()`:
+```bash
+objdump -d ctf.out | grep myfunc
+```
+
+![image](https://github.com/user-attachments/assets/50a203d4-80dd-470b-8a96-a06939e05741)
+
+2. `disas myfunc` to have a brief analysis:
+
+![image](https://github.com/user-attachments/assets/1cc99368-6cbf-46a6-848a-f4ca1ee3d67e)
+
+The `myfunc` absolutely does not exist in stack frame, so do these 2 integer variable `p` and `q`. 
+
+Thus, the idea is to determine exactly the location of `p` and `q` in stack frame. And I will assign directly the value of them before executing the program. 
+
+3. Determine the ebp's location.
+
+The first thing that we need to know is where the ebp is located after finishing the execution of the `vuln()`. 
+
+![image](https://github.com/user-attachments/assets/86c4ea05-39ad-4a30-85cd-02b297925f2d)
+
+
+> **Note:** Let's have a look at leave and ret. 
+> (1) is a location of `esp` before the `vuln()` executed. <br>
+> (2) After the `vuln()` has been done executing, the `esp` will move to the place where `ebp` is standing. (move ebp, esp). <br>
+> (3) The value of `ebp` in stack frame, will be copied to (the purple line), and it disappears later on. `esp`, therefore, will move down to as show in the figure. <br>
+> (4) We will meet the `ret` (the program now navigates to `myfunc()`, which is `0x0804851b). The `esp` location is shown in the figure. 
+
+The next thing is the location of `esp` when loading into `myfunc()` 
+
+![image](https://github.com/user-attachments/assets/c870260a-85c6-4e37-8667-565d314ae041)
+
+The location of of `p` and `q` is: ` 100 + 4 (blank) + \x1b\x85\x04\x08 (ret) + 4 (s) + \x11\x12\x08\x04 + \x62\x42\x64\x44 `  
+
+4. Conducting an attack:
+```bash
+echo $(python -c "print('a'*104 + '\x1b\x85\x04\x08' + 'b'*4 + '\x11\x12\x08\x04' + '\x62\x42\x64\x44')")
+```bash 
+
+
+
+
+
+
 

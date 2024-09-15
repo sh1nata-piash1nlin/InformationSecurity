@@ -4,10 +4,8 @@
 """
 
 # HCMUTE Information Security Lab 
-
 # BUFFER OVERFLOW ATTACK 
 # BOF1.c
-
 ## I. Prepare for the lab environment
 
 The Dockerfile is used to build a Docker image with all the required packages for Hands-On Assembly & Security labs.
@@ -57,7 +55,8 @@ The Dockerfile is used to build a Docker image with all the required packages fo
 
 ![image](https://github.com/user-attachments/assets/6bb8d95d-f457-46a7-a910-be766ac038a8)
 
-
+For exploiting it, just filling up the buffer 200 bytes, EBP, and placing the memory address of secretFunc() into EIP. 
+Instead of returning to its original position to continue the normal program flow, the EIP will now point to the secretFunc() and execute it
 
 ## III. Conducting the attack
 

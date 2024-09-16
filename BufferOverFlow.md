@@ -176,10 +176,10 @@ The first thing that we need to know is where the ebp is located after finishing
 ![image](https://github.com/user-attachments/assets/86c4ea05-39ad-4a30-85cd-02b297925f2d)
 
 
-> **Note:** Let's have a look at leave and ret. 
+> **Note:** Let's have a look at leave and ret. <br>
 > (1) is a location of `esp` before the `vuln()` executed. <br>
 > (2) After the `vuln()` has been done executing, the `esp` will move to the place where `ebp` is standing. (move ebp, esp). <br>
-> (3) The value of `ebp` in stack frame, will be copied to (the purple line), and it disappears later on. `esp`, therefore, will move down to as show in the figure. <br>
+> (3) The value of `ebp` in stack frame, will be copied to (the purple line), and disappear later on. `esp`, therefore, it will move down as show in the figure. <br>
 > (4) We will meet the `ret` (the program now navigates to `myfunc()`, which is `0x0804851b). The `esp` location is shown in the figure. 
 
 The next thing is the location of `esp` when loading into `myfunc()` 

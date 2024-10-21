@@ -89,6 +89,19 @@ nasm -f elf32 -o shellcode.o shellcode.asm
 ld -m elf_i386 -o shellcode shellcode.o
 ```
 
+*Observe the shellcode in machine format:* 
+
+```sh
+for i in $(objdump -d shellcode |grep "^ " |cut -f2); do echo -n '\x'$i; done;echo
+```
+*The printed result shows a 97 bytes long:*
+
+![image](https://github.com/user-attachments/assets/993994e9-3fc9-4a0b-9c94-f813142612a7)
+
+
+
+
+
 ## 3. Next, compile the C program: 
 *Compile the C code using `gcc`:* <br> 
 
@@ -96,12 +109,16 @@ ld -m elf_i386 -o shellcode shellcode.o
 gcc -g vuln.c -o vuln.out -fno-stack-protector -z execstack -mpreferred-stack-boundary=2
 ```
 
+
 ## 4. Stack Frame Visualization: 
 ![image](https://github.com/user-attachments/assets/9a7f47b2-94da-4e3f-8255-f84f2c618f6f)
 
+*The program has a vulnerability in the `strcpy` call, where an attacker can overflow the buffer variable in `main`. This allows us to overwrite the saved return address on the stack.* 
 
 ## 5. Conduct an attack: 
-*In this case, I will use a Return-to-lib-c attack* <br>
+*In this case, I will use a Return-to-lib-c attack* <br> 
+*First, we need to know the address of `system()`, `exit()`, `/bin/sh` 
+
 
 
 

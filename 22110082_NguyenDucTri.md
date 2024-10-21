@@ -77,7 +77,7 @@ _start:
 *Copy the assembly code above and save it in the assembly file:* <br> 
 
 ## 2. First, compile the Assembly ShellCode: 
-*Use `nasm` to assemble the code into an object file: *
+*Use `nasm` to assemble the code into an object file:*
 
 ```sh
 nasm -f elf32 -o shellcode.o shellcode.asm
@@ -95,6 +95,15 @@ ld -m elf_i386 -o shellcode shellcode.o
 ```sh
 gcc -g vuln.c -o vuln.out -fno-stack-protector -z execstack -mpreferred-stack-boundary=2
 ```
+
+## 4. Stack Frame Visualization: 
+![image](https://github.com/user-attachments/assets/9a7f47b2-94da-4e3f-8255-f84f2c618f6f)
+
+
+## 5. Conduct an attack: 
+*In this case, I will use a Return-to-lib-c attack* <br>
+
+
 
 
 

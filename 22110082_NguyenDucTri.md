@@ -137,27 +137,46 @@ cat secret_file.txt
 ```
 ![image](https://github.com/user-attachments/assets/f4a99a56-d431-4499-a94c-3bbd342cbfc4)
 
-## 2. Generate RSA Key Pair on receiver: 
+## 2. Generate RSA Key Pair on receiver machine: 
 ```sh
 openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
 openssl rsa -in private_key.pem -pubout -out public_key.pem
 ```
-Explaination:  <br>
+Explaination: We need to generate RSA keys because they are the mechanism that allows us to securely exchange the symmetric AES key used for encrypting the file. <br>
+
 `private_key.pem`: Keep this private! Used for decrypting the symmetric key.  <br>
 `public_key.pem`: Share this with Computer 1 for encrypting the symmetric key.  <br>
+
 ![image](https://github.com/user-attachments/assets/8d5b3bc6-b7d6-41f1-b987-453f84cda68c)
 
+Showing private_key: 
+```sh
+cat privatekey_pem
+```
+![image](https://github.com/user-attachments/assets/e7399000-1ced-4408-beab-cdd15da995f2)
+
+
 ## 3. Generate a Symmetric Key on sender vm1: 
+
 ```sh
 openssl rand -hex 32 > symmetric_key.txt
 ```
 This file (symmetric_key.txt) contains the symmetric key.
 
+![image](https://github.com/user-attachments/assets/8af687fd-3729-487e-ba89-afd7ca0df08c)
 
-## 4.  Encrypt the File with the Symmetric Key: 
+
+## 4.  Encrypt the File with the Symmetric Key using AES: 
+
+We need to encrypt the file using AES (Advanced Encryption Standard) first because AES is a symmetric encryption algorithm that is optimized for efficiency when dealing with large amounts of data, such as files.
+
 ```sh
-openssl enc -aes-256-ecb -in secret_file.txt -out secret.enc -kfile symmetric_key.txt
+openssl enc -aes-256-ecb -in secret_file.txt -out secret.enc -kfile symmetric_key.txt -pbkdf2
 ```
+The reason I add `-pbkdf2` which is short for Password-Based Key Derivation Function 2 that used to derive the encryption key from the password provided in `symmetric_key.txt`.
+
+![image](https://github.com/user-attachments/assets/884e0380-166d-4f7b-9f8a-5a93d1f6c733)
+
 
 ## 5. Encrypt the Symmetric Key with RSA: 
 ```sh

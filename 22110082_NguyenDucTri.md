@@ -190,11 +190,33 @@ openssl pkeyutl -encrypt -inkey receiver_public_key.pem -pubin -in symmetric_key
 ![image](https://github.com/user-attachments/assets/d1e51a3e-5db3-4568-9fee-d57497d71da1)
 
 
-## 6. Transfer Files from VM1 to VM2: 
+## 6. Transfer Files from VM1 to VM2:
+I will send `symmetric_key.enc` and `secret.enc` using netcat:  
+
+In receiver side: 
 ```sh
-scp secret.enc symmetric_key.enc user@vm2:
+nc -l -p 1410 > enc.txt
+nc -l -p 1410 > enc_file.txt
+
 ```
 
+In sender side: 
+```sh
+cat symmetric_key.enc | nc 172.17.0.3 1410
+cat secret.enc | nc 172.17.0.3 1410
+```
+
+## 7. Receiver Decrypts the AES Key Using Their RSA Private Key: 
+```sh
+openssl rsautl -decrypt -inkey receiver_private_key.pem -in symmetric_key.enc -out symmetric_key_decrypted.txt
+```
+
+## 8. Receiver Decrypts the File Using the Decrypted AES Key: 
+Finally, the Receiver will use the decrypted AES key (symmetric_key_decrypted.txt) to decrypt the file.
+```sh
+openssl enc -d -aes-256-cbc -in secret_file.enc -out secret_file_decrypted.txt -k $(cat symmetric_key_decrypted.txt)
+
+```
 
 
 # Task 3: Firewall configuration

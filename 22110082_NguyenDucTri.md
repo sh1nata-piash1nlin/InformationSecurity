@@ -115,13 +115,14 @@ The file is symmetrically encrypted/decrypted by exchanging secret key which is 
 All steps are made manually with openssl at the terminal of each computer.
 
 **Answer 1**:
-## 1. Creating a file in vm1 machine: <br>
+## 1. Creating a file in vm1 machine on sender: <br>
 ```sh
 echo "iam not good at exercise 1" > secret_file.txt
 cat secret_file.txt
 ```
+![image](https://github.com/user-attachments/assets/f4a99a56-d431-4499-a94c-3bbd342cbfc4)
 
-## 2. Generate RSA Key Pair: 
+## 2. Generate RSA Key Pair on receiver: 
 ```sh
 openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
 openssl rsa -in private_key.pem -pubout -out public_key.pem
@@ -129,6 +130,7 @@ openssl rsa -in private_key.pem -pubout -out public_key.pem
 Explaination:  <br>
 `private_key.pem`: Keep this private! Used for decrypting the symmetric key.  <br>
 `public_key.pem`: Share this with Computer 1 for encrypting the symmetric key.  <br>
+![image](https://github.com/user-attachments/assets/8d5b3bc6-b7d6-41f1-b987-453f84cda68c)
 
 ## 3. Generate a Symmetric Key on sender vm1: 
 ```sh
@@ -139,12 +141,12 @@ This file (symmetric_key.txt) contains the symmetric key.
 
 ## 4.  Encrypt the File with the Symmetric Key: 
 ```sh
-openssl enc -aes-256-ecb -in secret.txt -out secret.enc -kfile symmetric_key.txt
+openssl enc -aes-256-ecb -in secret_file.txt -out secret.enc -kfile symmetric_key.txt
 ```
 
 ## 5. 5. Encrypt the Symmetric Key with RSA: 
 ```sh
-openssl rsautl -encrypt -inkey public_key.pem -pubin -in symmetric_key.txt -out symmetric_key.enc
+openssl enc -aes-256-ecb -in secret_file.txt -out secret.enc -kfile symmetric_key.txt -pbkdf2
 ```
 
 

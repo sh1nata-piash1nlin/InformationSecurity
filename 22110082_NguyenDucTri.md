@@ -121,7 +121,29 @@ echo "iam not good at exercise 1" > secret_file.txt
 cat secret_file.txt
 ```
 
-## 2. 
+## 2. Generate RSA Key Pair: 
+```sh
+openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
+openssl rsa -in private_key.pem -pubout -out public_key.pem
+```
+Explaination:  <br>
+`private_key.pem`: Keep this private! Used for decrypting the symmetric key.  <br>
+`public_key.pem`: Share this with Computer 1 for encrypting the symmetric key.  <br>
+
+## 3. Generate a Symmetric Key on sender vm1: 
+```sh
+openssl rand -hex 32 > symmetric_key.txt
+```
+## 4.  Encrypt the File with the Symmetric Key: 
+```sh
+openssl enc -aes-256-ecb -in secret.txt -out secret.enc -kfile symmetric_key.txt
+```
+
+## 5. 5. Encrypt the Symmetric Key with RSA: 
+```sh
+openssl rsautl -encrypt -inkey public_key.pem -pubin -in symmetric_key.txt -out symmetric_key.enc
+```
+
 
 
 # Task 3: Firewall configuration

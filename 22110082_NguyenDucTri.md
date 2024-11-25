@@ -137,7 +137,7 @@ cat secret_file.txt
 ```
 ![image](https://github.com/user-attachments/assets/f4a99a56-d431-4499-a94c-3bbd342cbfc4)
 
-## 2. Generate RSA Key Pair on receiver machine: 
+## 2. Generate RSA Key Pair on both machines: 
 ```sh
 openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
 openssl rsa -in private_key.pem -pubout -out public_key.pem
@@ -147,17 +147,21 @@ Explaination: We need to generate RSA keys because they are the mechanism that a
 `private_key.pem`: Keep this private! Used for decrypting the symmetric key.  <br>
 `public_key.pem`: Share this with Computer 1 for encrypting the symmetric key.  <br>
 
-![image](https://github.com/user-attachments/assets/8d5b3bc6-b7d6-41f1-b987-453f84cda68c)
+![image](https://github.com/user-attachments/assets/744a1d8e-1e1f-4ca1-960e-16a11fe896c3)
+
+![image](https://github.com/user-attachments/assets/3f078d2c-99bc-4742-910c-bacf8369d494)
 
 Showing private_key: 
 ```sh
 cat privatekey_pem
 ```
-![image](https://github.com/user-attachments/assets/e7399000-1ced-4408-beab-cdd15da995f2)
+![image](https://github.com/user-attachments/assets/d32b598b-d74e-4057-9471-2b675f3d097f)
 
+The same step is conducted on receiver machine. I name the private key as `receiver_private_key.pem` and public key as `receiver_public_key.pem`. 
 
-## 3. Generate a Symmetric Key on sender vm1: 
+## 3. Generate a Symmetric Key on sender vm1: <br> 
 
+The Sender will encrypt a file (secret_file.txt) using AES-256 that saved in `sysmmetric_key.txt`.
 ```sh
 openssl rand -hex 32 > symmetric_key.txt
 ```
@@ -166,7 +170,7 @@ This file (symmetric_key.txt) contains the symmetric key.
 ![image](https://github.com/user-attachments/assets/8af687fd-3729-487e-ba89-afd7ca0df08c)
 
 
-## 4.  Encrypt the File with the Symmetric Key using AES: 
+## 4.  Encrypt the File with the Symmetric Key using AES on sender vm1: 
 
 We need to encrypt the file using AES (Advanced Encryption Standard) first because AES is a symmetric encryption algorithm that is optimized for efficiency when dealing with large amounts of data, such as files.
 
@@ -178,14 +182,17 @@ The reason I add `-pbkdf2` which is short for Password-Based Key Derivation Func
 ![image](https://github.com/user-attachments/assets/884e0380-166d-4f7b-9f8a-5a93d1f6c733)
 
 
-## 5. Encrypt the Symmetric Key with RSA: 
+## 5. Encrypt the AES Key with Receiver's RSA public key: 
+Next, the Sender will encrypt the AES key (symmetric_key.txt) using the Receiver's RSA public key, so it can be securely transferred.
 ```sh
-openssl enc -aes-256-ecb -in secret_file.txt -out secret.enc -kfile symmetric_key.txt -pbkdf2
+openssl pkeyutl -encrypt -inkey receiver_public_key.pem -pubin -in symmetric_key.txt -out symmetric_key.enc
 ```
+![image](https://github.com/user-attachments/assets/d1e51a3e-5db3-4568-9fee-d57497d71da1)
 
-## 6. Transfer Files from VM1 to VM2
+
+## 6. Transfer Files from VM1 to VM2: 
 ```sh
-scp secret.enc symmetric_key.enc user@vm2:/path/to/destination/
+scp secret.enc symmetric_key.enc user@vm2:
 ```
 
 

@@ -222,3 +222,30 @@ openssl enc -d -aes-256-cbc -in secret_file.enc -out secret_file_decrypted.txt -
 # Task 3: Firewall configuration
 **Question 1**:
 From VMs of previous tasks, install iptables and configure one of the 2 VMs as a web and ssh server. Demonstrate your ability to block/unblock http, icmp, ssh requests on the other host.
+
+**Answer 1**:
+
+I will choose VM1 as a web and ssh server on this exercise <br> 
+
+## 1. Install IP tables for both machines: 
+
+```sh
+apt install iptables -y
+```
+
+## 2. Set Up Web and SSH Server on VM1: 
+
+On VM1, install Apache to serve HTTP requests (web server):
+```sh
+apt install apache2 -y
+```
+
+Install the SSH server to accept SSH requests:
+```sh
+apt install openssh-server -y
+```
+
+
+
+
+

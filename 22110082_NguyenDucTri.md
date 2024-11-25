@@ -90,7 +90,10 @@ In receiver side, use the `nc` command, which is a `netcat-tradition` installed 
 nc -l -p <port> > received_file.txt
 nc -l -p 3034 > lol.hmac
 ```
-![image](https://github.com/user-attachments/assets/39e417cf-124d-4063-a53e-486157f15173)
+![image](https://github.com/user-attachments/assets/2919de21-699b-49ea-b9ad-4bb6aa683f5e)
+
+
+![image](https://github.com/user-attachments/assets/dde46cc5-a9a2-4c12-aa18-2a67c34be01f)
 
 In sender side, sending file using this command: 
 
@@ -115,6 +118,7 @@ Then compare them by:
 cmp receiver.hmac lol.hmac 
 ```
 ![image](https://github.com/user-attachments/assets/2b6dc9f1-5606-4816-ab1c-2fe40101e6cb)
+
 We can see that there is no difference because nothing is printed out. 
 
 Conclusion: Done

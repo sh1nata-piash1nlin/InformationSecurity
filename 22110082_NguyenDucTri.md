@@ -144,9 +144,14 @@ This file (symmetric_key.txt) contains the symmetric key.
 openssl enc -aes-256-ecb -in secret_file.txt -out secret.enc -kfile symmetric_key.txt
 ```
 
-## 5. 5. Encrypt the Symmetric Key with RSA: 
+## 5. Encrypt the Symmetric Key with RSA: 
 ```sh
 openssl enc -aes-256-ecb -in secret_file.txt -out secret.enc -kfile symmetric_key.txt -pbkdf2
+```
+
+## 6. Transfer Files from VM1 to VM2
+```sh
+scp secret.enc symmetric_key.enc user@vm2:/path/to/destination/
 ```
 
 

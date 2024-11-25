@@ -71,12 +71,12 @@ cat plain.txt
 ```
 ![image](https://github.com/user-attachments/assets/39fc675c-1306-49e9-a790-5ea502d1d2e2)
 
-## 4. Prerequisite a .hmac file using HMAC in sender `vm1`: <br>
+## 4. Prerequisites for a .hmac file using HMAC in sender `vm1`: <br>
 To ensure the authenticity of a file using a Message Authentication Code (MAC), you can use a Hash-based Message Authentication Code (HMAC) along with a secret key. HMAC combines a hash function (such as SHA-256) with a secret key to create an authentication code, which helps ensure that the file has not been tampered with and that only someone with the secret key can generate a valid authentication code. <br> 
 
 Create a HMAC file named `sender.hmac`: 
 ```sh
-openssl dgst -sha256 -mac HMAC -macopt key:1410 -out sender.hmac plain.txt
+openssl dgst -sha256 -mac HMAC -macopt key:1410 -out lol.hmac plain.txt
 ```
 
 Notice that the secret key I define here is: `1410`, which is the private key that only sender and receiver machines know about it. 
@@ -88,24 +88,35 @@ In receiver side, use the `nc` command, which is a `netcat-tradition` installed 
 
 ```sh
 nc -l -p <port> > received_file.txt
+nc -l -p 3034 > lol.hmac
 ```
+![image](https://github.com/user-attachments/assets/39e417cf-124d-4063-a53e-486157f15173)
 
 In sender side, sending file using this command: 
 
 ```sh
 cat plain.txt | nc <receiver_ip> <port>
+cat lol.hmac | nc <receiver_ip> <port> 
 ```
+
+Next, check if all the files have been catched:
+![image](https://github.com/user-attachments/assets/49c630dc-8173-472c-a22a-795eec380cab)
+
 
 ## 6. Verrifying  file integerity and authenticity at receiving machine:
 
 In receiver side, create HMAC of plain.txt in order to make a comparison with the `sender.hmac` that sender sends.
 ```sh
-openssl dgst -sha256 -mac HMAC -macopt key:1410 -out receive.hmac plain.txt
+openssl dgst -sha256 -mac HMAC -macopt key:1410 -out receiver.hmac plain.txt
 ```
+
 Then compare them by: 
 ```sh 
-cmp receive.hmac sender.hmac
+cmp receiver.hmac lol.hmac 
 ```
+![image](https://github.com/user-attachments/assets/2b6dc9f1-5606-4816-ab1c-2fe40101e6cb)
+We can see that there is no difference because nothing is printed out. 
+
 Conclusion: Done
 
 # Task 2: Transfering encrypted file and decrypt it with hybrid encryption. 

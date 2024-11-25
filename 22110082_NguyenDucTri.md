@@ -134,6 +134,9 @@ Explaination:  <br>
 ```sh
 openssl rand -hex 32 > symmetric_key.txt
 ```
+This file (symmetric_key.txt) contains the symmetric key.
+
+
 ## 4.  Encrypt the File with the Symmetric Key: 
 ```sh
 openssl enc -aes-256-ecb -in secret.txt -out secret.enc -kfile symmetric_key.txt
